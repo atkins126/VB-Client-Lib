@@ -272,7 +272,7 @@ end;
 procedure TReportDM.cdsTimesheetBeforeEdit(DataSet: TDataSet);
 begin
   inherited;
-  VBBaseDM.FMadeChanges := False;
+  VBBaseDM.MadeChanges := False;
 end;
 
 procedure TReportDM.cdsTimesheetBeforePost(DataSet: TDataSet);

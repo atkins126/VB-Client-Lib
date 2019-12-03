@@ -2056,7 +2056,6 @@ inherited ReportDM: TReportDM
       end>
     ResourceOptions.AssignedValues = [rvAutoReconnect]
     ResourceOptions.AutoReconnect = True
-    Connected = True
     LoginPrompt = False
     Left = 997
     Top = 12
