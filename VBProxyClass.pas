@@ -1,15 +1,13 @@
 //
 // Created by the DataSnap proxy generator.
-// 02/08/2019 11:40:10
-//
+// 06/12/2019 09:49:09
+// 
 
 unit VBProxyClass;
 
 interface
 
-uses System.JSON, Data.DBXCommon, Data.DBXClient, Data.DBXDataSnap, Data.DBXJSON,
-  Datasnap.DSProxy, System.Classes, System.SysUtils, Data.DB, Data.SqlExpr,
-  Data.DBXDBReaders, Data.DBXCDSReaders, Data.FireDACJSONReflect, Data.DBXJSONReflect;
+uses System.JSON, Data.DBXCommon, Data.DBXClient, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy, System.Classes, System.SysUtils, Data.DB, Data.SqlExpr, Data.DBXDBReaders, Data.DBXCDSReaders, Data.FireDACJSONReflect, Data.DBXJSONReflect;
 
 type
   TVBServerMethodsClient = class(TDSAdminClient)
@@ -17,6 +15,7 @@ type
     FDSServerModuleCreateCommand: TDBXCommand;
     FDSServerModuleDestroyCommand: TDBXCommand;
     FconFBBeforeConnectCommand: TDBXCommand;
+    FconFBErrorCommand: TDBXCommand;
     FGetDataCommand: TDBXCommand;
     FApplyDataUpdatesCommand: TDBXCommand;
     FExecuteSQLCommandCommand: TDBXCommand;
@@ -25,6 +24,7 @@ type
     FTestTypeCommand: TDBXCommand;
     FEchoStringCommand: TDBXCommand;
     FExecuteStoredProcedureCommand: TDBXCommand;
+    FGetNextIDCommand: TDBXCommand;
   public
     constructor Create(ADBXConnection: TDBXConnection); overload;
     constructor Create(ADBXConnection: TDBXConnection; AInstanceOwner: Boolean); overload;
@@ -32,14 +32,16 @@ type
     procedure DSServerModuleCreate(Sender: TObject);
     procedure DSServerModuleDestroy(Sender: TObject);
     procedure conFBBeforeConnect(Sender: TObject);
-    function GetData(Request: string; ParameterList: string; GeneratorName: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
-    function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; GeneratorName: string; Tablename: string): string;
+    procedure conFBError(ASender: TObject; AInitiator: TObject; var AException: Exception);
+    function GetData(Request: string; ParameterList: string; Generatorname: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
+    function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; Generatorname: string; Tablename: string): string;
     function ExecuteSQLCommand(Request: string; var Reponse: string): string;
     function GetFileVersion(Request: string; var Response: string): string;
     function DownloadFile(Request: string; var Response: string; var Size: Int64): TStream;
     function TestType(Request: string; var Response: string): string;
     function EchoString(Request: string; var Response: string): string;
     function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
+    function GetNextID(GeneratorName: string): string;
   end;
 
 implementation
@@ -119,7 +121,71 @@ begin
   FconFBBeforeConnectCommand.ExecuteUpdate;
 end;
 
-function TVBServerMethodsClient.GetData(Request: string; ParameterList: string; GeneratorName: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
+procedure TVBServerMethodsClient.conFBError(ASender: TObject; AInitiator: TObject; var AException: Exception);
+begin
+  if FconFBErrorCommand = nil then
+  begin
+    FconFBErrorCommand := FDBXConnection.CreateCommand;
+    FconFBErrorCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FconFBErrorCommand.Text := 'TVBServerMethods.conFBError';
+    FconFBErrorCommand.Prepare;
+  end;
+  if not Assigned(ASender) then
+    FconFBErrorCommand.Parameters[0].Value.SetNull
+  else
+  begin
+    FMarshal := TDBXClientCommand(FconFBErrorCommand.Parameters[0].ConnectionHandler).GetJSONMarshaler;
+    try
+      FconFBErrorCommand.Parameters[0].Value.SetJSONValue(FMarshal.Marshal(ASender), True);
+      if FInstanceOwner then
+        ASender.Free
+    finally
+      FreeAndNil(FMarshal)
+    end
+  end;
+  if not Assigned(AInitiator) then
+    FconFBErrorCommand.Parameters[1].Value.SetNull
+  else
+  begin
+    FMarshal := TDBXClientCommand(FconFBErrorCommand.Parameters[1].ConnectionHandler).GetJSONMarshaler;
+    try
+      FconFBErrorCommand.Parameters[1].Value.SetJSONValue(FMarshal.Marshal(AInitiator), True);
+      if FInstanceOwner then
+        AInitiator.Free
+    finally
+      FreeAndNil(FMarshal)
+    end
+  end;
+  if not Assigned(AException) then
+    FconFBErrorCommand.Parameters[2].Value.SetNull
+  else
+  begin
+    FMarshal := TDBXClientCommand(FconFBErrorCommand.Parameters[2].ConnectionHandler).GetJSONMarshaler;
+    try
+      FconFBErrorCommand.Parameters[2].Value.SetJSONValue(FMarshal.Marshal(AException), True);
+      if FInstanceOwner then
+        AException.Free
+    finally
+      FreeAndNil(FMarshal)
+    end
+  end;
+  FconFBErrorCommand.ExecuteUpdate;
+  if not FconFBErrorCommand.Parameters[2].Value.IsNull then
+  begin
+    FUnMarshal := TDBXClientCommand(FconFBErrorCommand.Parameters[2].ConnectionHandler).GetJSONUnMarshaler;
+    try
+      AException := Exception(FUnMarshal.UnMarshal(FconFBErrorCommand.Parameters[2].Value.GetJSONValue(True)));
+      if FInstanceOwner then
+        FconFBErrorCommand.FreeOnExecute(AException);
+    finally
+      FreeAndNil(FUnMarshal)
+    end;
+  end
+  else
+    AException := nil;
+end;
+
+function TVBServerMethodsClient.GetData(Request: string; ParameterList: string; Generatorname: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
 begin
   if FGetDataCommand = nil then
   begin
@@ -130,7 +196,7 @@ begin
   end;
   FGetDataCommand.Parameters[0].Value.SetWideString(Request);
   FGetDataCommand.Parameters[1].Value.SetWideString(ParameterList);
-  FGetDataCommand.Parameters[2].Value.SetWideString(GeneratorName);
+  FGetDataCommand.Parameters[2].Value.SetWideString(Generatorname);
   FGetDataCommand.Parameters[3].Value.SetWideString(Tablename);
   FGetDataCommand.Parameters[4].Value.SetWideString(DataSetName);
   FGetDataCommand.Parameters[5].Value.SetWideString(Response);
@@ -151,7 +217,7 @@ begin
     Result := nil;
 end;
 
-function TVBServerMethodsClient.ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; GeneratorName: string; Tablename: string): string;
+function TVBServerMethodsClient.ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; Generatorname: string; Tablename: string): string;
 begin
   if FApplyDataUpdatesCommand = nil then
   begin
@@ -174,7 +240,7 @@ begin
     end
   end;
   FApplyDataUpdatesCommand.Parameters[1].Value.SetWideString(Response);
-  FApplyDataUpdatesCommand.Parameters[2].Value.SetWideString(GeneratorName);
+  FApplyDataUpdatesCommand.Parameters[2].Value.SetWideString(Generatorname);
   FApplyDataUpdatesCommand.Parameters[3].Value.SetWideString(Tablename);
   FApplyDataUpdatesCommand.ExecuteUpdate;
   Response := FApplyDataUpdatesCommand.Parameters[1].Value.GetWideString;
@@ -278,6 +344,20 @@ begin
   Result := FExecuteStoredProcedureCommand.Parameters[2].Value.GetWideString;
 end;
 
+function TVBServerMethodsClient.GetNextID(GeneratorName: string): string;
+begin
+  if FGetNextIDCommand = nil then
+  begin
+    FGetNextIDCommand := FDBXConnection.CreateCommand;
+    FGetNextIDCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FGetNextIDCommand.Text := 'TVBServerMethods.GetNextID';
+    FGetNextIDCommand.Prepare;
+  end;
+  FGetNextIDCommand.Parameters[0].Value.SetWideString(GeneratorName);
+  FGetNextIDCommand.ExecuteUpdate;
+  Result := FGetNextIDCommand.Parameters[1].Value.GetWideString;
+end;
+
 constructor TVBServerMethodsClient.Create(ADBXConnection: TDBXConnection);
 begin
   inherited Create(ADBXConnection);
@@ -293,6 +373,7 @@ begin
   FDSServerModuleCreateCommand.DisposeOf;
   FDSServerModuleDestroyCommand.DisposeOf;
   FconFBBeforeConnectCommand.DisposeOf;
+  FconFBErrorCommand.DisposeOf;
   FGetDataCommand.DisposeOf;
   FApplyDataUpdatesCommand.DisposeOf;
   FExecuteSQLCommandCommand.DisposeOf;
@@ -301,8 +382,8 @@ begin
   FTestTypeCommand.DisposeOf;
   FEchoStringCommand.DisposeOf;
   FExecuteStoredProcedureCommand.DisposeOf;
+  FGetNextIDCommand.DisposeOf;
   inherited;
 end;
 
 end.
-

@@ -17,7 +17,8 @@ uses
   dxLayoutControl, cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit,
   cxNavigator, dxDateRanges, Data.DB, cxDBData, cxDBNavigator, cxGridLevel,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
-  cxGridBandedTableView, cxGridDBBandedTableView, cxGrid, CommonValues;
+  cxGridBandedTableView, cxGridDBBandedTableView, cxGrid, CommonValues,
+  dxScrollbarAnnotations;
 
 type
   TBaseGridFrm = class(TBaseLayoutFrm)

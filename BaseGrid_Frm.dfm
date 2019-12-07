@@ -19,6 +19,7 @@ inherited BaseGridFrm: TBaseGridFrm
       TabOrder = 1
       object viewMaster: TcxGridDBBandedTableView
         Navigator.Buttons.CustomButtons = <>
+        ScrollbarAnnotations.CustomAnnotations = <>
         OnCustomDrawCell = viewMasterCustomDrawCell
         DataController.Summary.DefaultGroupSummaryItems = <>
         DataController.Summary.FooterSummaryItems = <>
@@ -36,7 +37,7 @@ inherited BaseGridFrm: TBaseGridFrm
     object navMaster: TcxDBNavigator [1]
       Left = 11
       Top = 11
-      Width = 235
+      Width = 245
       Height = 40
       BorderStyle = nbsNone
       Buttons.ConfirmDelete = False
@@ -83,7 +84,7 @@ inherited BaseGridFrm: TBaseGridFrm
       AlignHorz = ahLeft
       Control = navMaster
       ControlOptions.OriginalHeight = 40
-      ControlOptions.OriginalWidth = 235
+      ControlOptions.OriginalWidth = 245
       ControlOptions.ShowBorder = False
       Index = 0
     end

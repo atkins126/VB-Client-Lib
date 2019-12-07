@@ -148,7 +148,6 @@ type
     cdsTimesheetID: TIntegerField;
     cdsTimesheetUSER_ID: TIntegerField;
     cdsTimesheetCUSTOMER_ID: TIntegerField;
-    cdsTimesheetPRICE_ITEM_ID: TIntegerField;
     cdsTimesheetPRICE_LIST_ITEM_ID: TIntegerField;
     cdsTimesheetRATE_UNIT_ID: TIntegerField;
     cdsTimesheetACTIVITY_TYPE_ID: TIntegerField;

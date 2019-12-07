@@ -4281,13 +4281,6 @@ inherited ReportDM: TReportDM
       Origin = 'CUSTOMER_ID'
       Required = True
     end
-    object cdsTimesheetPRICE_ITEM_ID: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'PI ID'
-      FieldName = 'PRICE_ITEM_ID'
-      Origin = 'PRICE_ITEM_ID'
-      Required = True
-    end
     object cdsTimesheetPRICE_LIST_ITEM_ID: TIntegerField
       Alignment = taLeftJustify
       DisplayLabel = 'Price Item'
