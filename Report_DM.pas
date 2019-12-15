@@ -1,5 +1,20 @@
 unit Report_DM;
 
+
+{Note to developer:
+ This is a listing of the report files on disk to be loaded into the relevant
+ report component at runtime.
+ All reports are located in the C:\Data\VB\Reports\ folder.
+
+ Report Compnent                Filename
+ -------------------------------------------------------------------------------
+ rptTimesheetUser               TimesheetUser.fr3
+ rptTimesheetActivity           TimesheetCustomer.fr3
+ rptTimesheetCustomer           TSSummaryByActivity.fr3
+ rptBillableSummaryByCustomer   BillableSummaryByCustomer.fr3
+ rptBillableSummaryByPeriod     BillableSummaryByPeriod.fr3
+}
+
 interface
 
 uses
@@ -124,7 +139,6 @@ type
     cdsTSBillableSTD_RATE: TFloatField;
     cdsTSBillableITEM_VALUE: TFloatField;
     cdsTSBillableTHE_PERIOD: TIntegerField;
-    cdsTSBillableWEEK_ENDING: TDateField;
     cdsTSBillableBILLABLE: TIntegerField;
     cdsTSBillableBILLABLE_STR: TStringField;
     cdsTSBillableINVOICE_ID: TIntegerField;
@@ -222,6 +236,29 @@ type
     cdsCustomerIS_ACTIVE: TIntegerField;
     cdsCustomerCUSTOMER_GROUP_ID: TIntegerField;
     dtsCustomer: TDataSource;
+    cdsPriceListView: TFDMemTable;
+    cdsPriceListViewID: TIntegerField;
+    cdsPriceListViewRATE_UNIT_ID: TIntegerField;
+    cdsPriceListViewNAME: TStringField;
+    cdsPriceListViewRATE: TFloatField;
+    cdsPriceListViewDESCRIPTION: TStringField;
+    cdsPriceListViewINVOICE_DESCRIPTION: TStringField;
+    cdsPriceListViewRATE_UNIT: TStringField;
+    dtsPriceListView: TDataSource;
+    cdsRateUnit: TFDMemTable;
+    cdsRateUnitID: TIntegerField;
+    cdsRateUnitNAME: TStringField;
+    dtsRateuit: TDataSource;
+    cdsSystemUser: TFDMemTable;
+    cdsSystemUserID: TIntegerField;
+    cdsSystemUserFIRST_NAME: TStringField;
+    cdsSystemUserLAST_NAME: TStringField;
+    cdsSystemUserLOGIN_NAME: TStringField;
+    cdsSystemUserEMAIL_ADDRESS: TStringField;
+    cdsSystemUserPASSWORD: TStringField;
+    cdsSystemUserACCOUNT_ENABLED: TIntegerField;
+    dtsSystemUser: TDataSource;
+    rpt1: TfrxReport;
     procedure cdsTimesheetCalcFields(DataSet: TDataSet);
     procedure cdsTimesheetAfterPost(DataSet: TDataSet);
     procedure cdsTimesheetBeforePost(DataSet: TDataSet);
