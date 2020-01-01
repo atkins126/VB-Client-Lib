@@ -177,7 +177,6 @@ type
     cdsTimesheetACTIVITY_DATE: TDateField;
     cdsTimesheetDATE_MODIFIED: TDateField;
     cdsTimesheetTHE_PERIOD: TIntegerField;
-    cdsTimesheetWEEK_ENDING: TDateField;
     cdsTimesheetBILLABLE: TIntegerField;
     cdsTimesheetDAY_NAME: TStringField;
     cdsTimesheetDAY_ORDER: TIntegerField;

@@ -101,7 +101,8 @@ inherited ReportDM: TReportDM
     FetchOptions.RecordCountMode = cmTotal
     FormatOptions.AssignedValues = [fvDataSnapCompatibility]
     FormatOptions.DataSnapCompatibility = True
-    ResourceOptions.AssignedValues = [rvSilentMode, rvStorePrettyPrint]
+    ResourceOptions.AssignedValues = [rvPersistent, rvSilentMode, rvStorePrettyPrint]
+    ResourceOptions.Persistent = True
     ResourceOptions.StorePrettyPrint = True
     ResourceOptions.SilentMode = True
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
@@ -4395,12 +4396,6 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Period'
       FieldName = 'THE_PERIOD'
       Origin = 'THE_PERIOD'
-      Required = True
-    end
-    object cdsTimesheetWEEK_ENDING: TDateField
-      DisplayLabel = 'Wk Ending'
-      FieldName = 'WEEK_ENDING'
-      Origin = 'WEEK_ENDING'
       Required = True
     end
     object cdsTimesheetBILLABLE: TIntegerField
