@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
 
-  BaseLayout_Frm,
+  BaseLayout_Frm, CommonValues,
 
   FireDac.Comp.Client,
 
@@ -17,7 +17,7 @@ uses
   dxLayoutControl, cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit,
   cxNavigator, dxDateRanges, Data.DB, cxDBData, cxDBNavigator, cxGridLevel,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
-  cxGridBandedTableView, cxGridDBBandedTableView, cxGrid, CommonValues,
+  cxGridBandedTableView, cxGridDBBandedTableView, cxGrid,
   dxScrollbarAnnotations;
 
 type
@@ -29,12 +29,15 @@ type
     imgNav: TcxImageList;
     litNavigator: TdxLayoutItem;
     litGrid: TdxLayoutItem;
+    grpToolbar: TdxLayoutGroup;
     procedure viewMasterCustomDrawCell(Sender: TcxCustomGridTableView;
       ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo; var ADone: Boolean);
-    procedure CmDrawBorder(var Msg: TMessage); message CM_DRAWBORDER;
+    procedure DrawCellBorder(var Msg: TMessage); message CM_DRAWBORDER;
 //    procedure SetButtonVisibility(ReadOnlyDataSet: Boolean);
     procedure SetButtonVisibility(DataSet: TFDMemTable; MasterID: Integer);
     procedure FormShow(Sender: TObject);
+    procedure navMasterButtonsButtonClick(Sender: TObject;
+      AButtonIndex: Integer; var ADone: Boolean);
   private
     { Private declarations }
   public
@@ -50,7 +53,7 @@ implementation
 
 uses CommonFunction;
 
-procedure TBaseGridFrm.CmDrawBorder(var Msg: TMessage);
+procedure TBaseGridFrm.DrawCellBorder(var Msg: TMessage);
 begin
   if (TObject(Msg.WParam) is TcxCanvas)
     and (TObject(Msg.LParam) is TcxGridTableDataCellViewInfo) then
@@ -62,6 +65,16 @@ begin
   inherited;
   grdMaster.SetFocus;
   viewMaster.Focused := True;
+end;
+
+procedure TBaseGridFrm.navMasterButtonsButtonClick(Sender: TObject;
+  AButtonIndex: Integer; var ADone: Boolean);
+begin
+  inherited;
+  // Don't allow printing or exporting data whilst editing data.
+  if (AButtonIndex in [16, 17, 18, 19]) and (navMaster.DataSet.State in [dsEdit, dsInsert]) then
+    raise EExecutionException.Create('Cannot use the print/export functions whilst editing data.' + CRLF +
+      'Please post or cancel the current transaction and try again.');
 end;
 
 procedure TBaseGridFrm.SetButtonVisibility(DataSet: TFDMemTable; MasterID: Integer);
