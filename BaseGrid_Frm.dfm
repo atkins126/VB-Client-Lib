@@ -37,7 +37,7 @@ inherited BaseGridFrm: TBaseGridFrm
     object navMaster: TcxDBNavigator [1]
       Left = 11
       Top = 11
-      Width = 342
+      Width = 360
       Height = 40
       BorderStyle = nbsNone
       Buttons.OnButtonClick = navMasterButtonsButtonClick
@@ -97,7 +97,7 @@ inherited BaseGridFrm: TBaseGridFrm
       Parent = grpToolbar
       Control = navMaster
       ControlOptions.OriginalHeight = 40
-      ControlOptions.OriginalWidth = 342
+      ControlOptions.OriginalWidth = 360
       ControlOptions.ShowBorder = False
       Index = 0
     end
@@ -121,8 +121,8 @@ inherited BaseGridFrm: TBaseGridFrm
     end
   end
   inherited styRepository: TcxStyleRepository
-    Left = 205
-    Top = 120
+    Left = 218
+    Top = 115
     PixelsPerInch = 96
   end
   inherited actList: TActionList
@@ -136,9 +136,11 @@ inherited BaseGridFrm: TBaseGridFrm
   end
   inherited img16: TcxImageList
     FormatVersion = 1
+    DesignInfo = 4260059
   end
   inherited img32: TcxImageList
     FormatVersion = 1
+    DesignInfo = 4260137
     ImageInfo = <
       item
         ImageClass = 'TBitmap'
@@ -2545,5 +2547,17 @@ inherited BaseGridFrm: TBaseGridFrm
           0002000000020000000200000002000000020000000200000001000000010000
           0001000000010000000100000001000000010000000000000000}
       end>
+  end
+  object dlgFileSave: TSaveDialog
+    Filter = 'Excel Files (*.xlsx)|*.xlsx'
+    Left = 296
+    Top = 115
+  end
+  object dlgPrint: TdxPrintDialog
+    ButtonsEnabled = [pdbPrinterProperties, pdbNetwork, pdbPreview, pdbPageSetup]
+    ButtonsVisible = [pdbPrinterProperties, pdbNetwork, pdbPageSetup]
+    OptionsEnabled = [pdoPrintToFile, pdoAllPages, pdoCurrentPage, pdoPageRange]
+    Left = 375
+    Top = 115
   end
 end

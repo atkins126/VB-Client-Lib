@@ -10,6 +10,8 @@ uses
 
   FireDac.Comp.Client,
 
+  frxClass, frxDBSet,
+
   cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, dxSkinsCore, dxSkinsDefaultPainters,
   System.ImageList, Vcl.ImgList, cxImageList, dxLayoutLookAndFeels,
@@ -18,7 +20,7 @@ uses
   cxNavigator, dxDateRanges, Data.DB, cxDBData, cxDBNavigator, cxGridLevel,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridBandedTableView, cxGridDBBandedTableView, cxGrid,
-  dxScrollbarAnnotations;
+  dxScrollbarAnnotations, dxPrnDev, dxPrnDlg;
 
 type
   TBaseGridFrm = class(TBaseLayoutFrm)
@@ -30,6 +32,8 @@ type
     litNavigator: TdxLayoutItem;
     litGrid: TdxLayoutItem;
     grpToolbar: TdxLayoutGroup;
+    dlgFileSave: TSaveDialog;
+    dlgPrint: TdxPrintDialog;
     procedure viewMasterCustomDrawCell(Sender: TcxCustomGridTableView;
       ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo; var ADone: Boolean);
     procedure DrawCellBorder(var Msg: TMessage); message CM_DRAWBORDER;
@@ -51,7 +55,9 @@ implementation
 
 {$R *.dfm}
 
-uses CommonFunction;
+uses
+  CommonFunction,
+  Report_DM;
 
 procedure TBaseGridFrm.DrawCellBorder(var Msg: TMessage);
 begin
@@ -75,6 +81,25 @@ begin
   if (AButtonIndex in [16, 17, 18, 19]) and (navMaster.DataSet.State in [dsEdit, dsInsert]) then
     raise EExecutionException.Create('Cannot use the print/export functions whilst editing data.' + CRLF +
       'Please post or cancel the current transaction and try again.');
+
+  case AButtonIndex of
+    16, 17: // Preview & Print
+      begin
+        if ReportDM.rptMaster.PrepareReport then
+          if AButtonIndex = 16 then
+            ReportDM.rptMaster.ShowPreparedReport
+          else
+          begin
+            if dlgPrint.Execute then
+            begin
+              ReportDM.rptMaster.PrintOptions.Copies :=
+                dlgPrint.DialogData.Copies;
+
+              ReportDM.rptMaster.Print;
+            end;
+          end;
+      end;
+  end;
 end;
 
 procedure TBaseGridFrm.SetButtonVisibility(DataSet: TFDMemTable; MasterID: Integer);
