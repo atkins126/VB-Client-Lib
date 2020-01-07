@@ -34,6 +34,8 @@ type
     grpToolbar: TdxLayoutGroup;
     dlgFileSave: TSaveDialog;
     dlgPrint: TdxPrintDialog;
+    procedure PrintReport(ATag: Integer);
+
     procedure viewMasterCustomDrawCell(Sender: TcxCustomGridTableView;
       ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo; var ADone: Boolean);
     procedure DrawCellBorder(var Msg: TMessage); message CM_DRAWBORDER;
@@ -81,12 +83,15 @@ begin
   if (AButtonIndex in [16, 17, 18, 19]) and (navMaster.DataSet.State in [dsEdit, dsInsert]) then
     raise EExecutionException.Create('Cannot use the print/export functions whilst editing data.' + CRLF +
       'Please post or cancel the current transaction and try again.');
+end;
 
-  case AButtonIndex of
+procedure TBaseGridFrm.PrintReport(ATag: Integer);
+begin
+  case ATag of
     16, 17: // Preview & Print
       begin
         if ReportDM.rptMaster.PrepareReport then
-          if AButtonIndex = 16 then
+          if ATag = 16 then
             ReportDM.rptMaster.ShowPreparedReport
           else
           begin
