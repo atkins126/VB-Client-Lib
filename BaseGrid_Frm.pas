@@ -35,7 +35,6 @@ type
     grpToolbar: TdxLayoutGroup;
     dlgFileSave: TSaveDialog;
     dlgPrint: TdxPrintDialog;
-    procedure PrintReport(ATag: Integer);
     procedure ExportToExcel(FileName: string; Grid: TcxGrid);
     procedure ExportToPDF(FileName: string; Grid: TcxGrid);
 
@@ -48,10 +47,13 @@ type
     procedure FormShow(Sender: TObject);
     procedure navMasterButtonsButtonClick(Sender: TObject;
       AButtonIndex: Integer; var ADone: Boolean);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
+//    FMasterFormType: TMasterFormTypes;
   public
     { Public declarations }
+//    property MasterFormType: TMasterFormTypes read FMasterFormType write FMasterFormType;
   end;
 
 var
@@ -70,6 +72,12 @@ begin
   if (TObject(Msg.WParam) is TcxCanvas)
     and (TObject(Msg.LParam) is TcxGridTableDataCellViewInfo) then
     TcxCanvas(Msg.WParam).DrawComplexFrame(TcxGridTableDataCellViewInfo(Msg.LParam).ClientBounds, clRed, clRed, cxBordersAll, 1);
+end;
+
+procedure TBaseGridFrm.FormCreate(Sender: TObject);
+begin
+  inherited;
+  ReportDM.PrintExporting := False;
 end;
 
 procedure TBaseGridFrm.FormShow(Sender: TObject);
@@ -95,28 +103,50 @@ begin
     19: ReportDM.ReportAction := raPDF;
   end;
   SetPrintButtonStatus(TFDMemTable(navMaster.DataSet));
-end;
 
-procedure TBaseGridFrm.PrintReport(ATag: Integer);
-begin
-  case ATag of
-    16, 17: // Preview & Print
-      begin
-        if ReportDM.rptMaster.PrepareReport then
-          if ATag = 16 then
-            ReportDM.rptMaster.ShowPreparedReport
-          else
-          begin
-            if dlgPrint.Execute then
-            begin
-              ReportDM.rptMaster.PrintOptions.Copies :=
-                dlgPrint.DialogData.Copies;
-
-              ReportDM.rptMaster.Print;
-            end;
-          end;
-      end;
-  end;
+//  case ReportDM.ReportAction of
+//    raPreview, raPrint, raExcel, raPDF:
+//      begin
+//        Screen.Cursor := crHourglass;
+//        ReportDM.PrintExporting := True;
+//        try
+//          ReportTypeName := 'Activity Type Listing';
+//          case ReportDM.ReportAction of
+//            raPreview, raPrint:
+//              begin
+//                RepFileName := MTDM.ShellResource.ReportFolder + 'MasterGenericTableTemplate.fr3';
+//
+//                if not TFile.Exists(RepFileName) then
+//                  raise EFileNotFoundException.Create('Report file: ' + RepFileName + ' not found. Cannot load report.');
+//
+//                PrintExportReport := TPrintExportData.Create;
+//                PrintExportReport.SourceDataSet := MTDM.cdsActivityType;
+//                PrintExportReport.TargetDataSet := ReportDM.cdsActivityType;
+//                PrintExportReport.Report := ReportDM.rptMaster;
+//                PrintExportReport.ReportDataSet := ReportDM.fdsMaster;
+//                PrintExportReport.ReportTypeName := ReportTypeName;
+//                PrintExportReport.ReportFileName := RepFileName;
+//                PrintExportReport.ReportAction := ReportDM.ReportAction;
+//                PrintExportReport.PrintPreview;
+//              end;
+//
+//            raExcel:
+//              begin
+//                ExportToExcel(ReportTypeName, grdMaster);
+//              end;
+//
+//            raPDF:
+//              begin
+//
+//              end;
+//          end;
+//        finally
+//          PrintExportReport.Free;
+//          ReportDM.PrintExporting := False;
+//          Screen.Cursor := crDefault;
+//        end;
+//      end;
+//  end;
 end;
 
 procedure TBaseGridFrm.ExportToExcel(FileName: string; Grid: TcxGrid);
