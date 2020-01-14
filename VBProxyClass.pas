@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 06/12/2019 09:49:09
+// 13/01/2020 12:35:47
 // 
 
 unit VBProxyClass;
@@ -25,6 +25,7 @@ type
     FEchoStringCommand: TDBXCommand;
     FExecuteStoredProcedureCommand: TDBXCommand;
     FGetNextIDCommand: TDBXCommand;
+    FGetUseCountCommand: TDBXCommand;
   public
     constructor Create(ADBXConnection: TDBXConnection); overload;
     constructor Create(ADBXConnection: TDBXConnection; AInstanceOwner: Boolean); overload;
@@ -42,6 +43,7 @@ type
     function EchoString(Request: string; var Response: string): string;
     function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
     function GetNextID(GeneratorName: string): string;
+    function GetUseCount(Request: string): string;
   end;
 
 implementation
@@ -358,6 +360,20 @@ begin
   Result := FGetNextIDCommand.Parameters[1].Value.GetWideString;
 end;
 
+function TVBServerMethodsClient.GetUseCount(Request: string): string;
+begin
+  if FGetUseCountCommand = nil then
+  begin
+    FGetUseCountCommand := FDBXConnection.CreateCommand;
+    FGetUseCountCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FGetUseCountCommand.Text := 'TVBServerMethods.GetUseCount';
+    FGetUseCountCommand.Prepare;
+  end;
+  FGetUseCountCommand.Parameters[0].Value.SetWideString(Request);
+  FGetUseCountCommand.ExecuteUpdate;
+  Result := FGetUseCountCommand.Parameters[1].Value.GetWideString;
+end;
+
 constructor TVBServerMethodsClient.Create(ADBXConnection: TDBXConnection);
 begin
   inherited Create(ADBXConnection);
@@ -383,6 +399,7 @@ begin
   FEchoStringCommand.DisposeOf;
   FExecuteStoredProcedureCommand.DisposeOf;
   FGetNextIDCommand.DisposeOf;
+  FGetUseCountCommand.DisposeOf;
   inherited;
 end;
 
