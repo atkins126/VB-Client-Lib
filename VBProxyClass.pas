@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 13/01/2020 12:35:47
+// 10/03/2020 16:23:45
 // 
 
 unit VBProxyClass;
@@ -35,8 +35,8 @@ type
     procedure conFBBeforeConnect(Sender: TObject);
     procedure conFBError(ASender: TObject; AInitiator: TObject; var AException: Exception);
     function GetData(Request: string; ParameterList: string; Generatorname: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
-    function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; Generatorname: string; Tablename: string): string;
-    function ExecuteSQLCommand(Request: string; var Reponse: string): string;
+    function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; GeneratorName: string; TableName: string): string;
+    function ExecuteSQLCommand(Request: string): string;
     function GetFileVersion(Request: string; var Response: string): string;
     function DownloadFile(Request: string; var Response: string; var Size: Int64): TStream;
     function TestType(Request: string; var Response: string): string;
@@ -219,7 +219,7 @@ begin
     Result := nil;
 end;
 
-function TVBServerMethodsClient.ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; Generatorname: string; Tablename: string): string;
+function TVBServerMethodsClient.ApplyDataUpdates(DeltaList: TFDJSONDeltas; var Response: string; GeneratorName: string; TableName: string): string;
 begin
   if FApplyDataUpdatesCommand = nil then
   begin
@@ -242,14 +242,14 @@ begin
     end
   end;
   FApplyDataUpdatesCommand.Parameters[1].Value.SetWideString(Response);
-  FApplyDataUpdatesCommand.Parameters[2].Value.SetWideString(Generatorname);
-  FApplyDataUpdatesCommand.Parameters[3].Value.SetWideString(Tablename);
+  FApplyDataUpdatesCommand.Parameters[2].Value.SetWideString(GeneratorName);
+  FApplyDataUpdatesCommand.Parameters[3].Value.SetWideString(TableName);
   FApplyDataUpdatesCommand.ExecuteUpdate;
   Response := FApplyDataUpdatesCommand.Parameters[1].Value.GetWideString;
   Result := FApplyDataUpdatesCommand.Parameters[4].Value.GetWideString;
 end;
 
-function TVBServerMethodsClient.ExecuteSQLCommand(Request: string; var Reponse: string): string;
+function TVBServerMethodsClient.ExecuteSQLCommand(Request: string): string;
 begin
   if FExecuteSQLCommandCommand = nil then
   begin
@@ -259,10 +259,8 @@ begin
     FExecuteSQLCommandCommand.Prepare;
   end;
   FExecuteSQLCommandCommand.Parameters[0].Value.SetWideString(Request);
-  FExecuteSQLCommandCommand.Parameters[1].Value.SetWideString(Reponse);
   FExecuteSQLCommandCommand.ExecuteUpdate;
-  Reponse := FExecuteSQLCommandCommand.Parameters[1].Value.GetWideString;
-  Result := FExecuteSQLCommandCommand.Parameters[2].Value.GetWideString;
+  Result := FExecuteSQLCommandCommand.Parameters[1].Value.GetWideString;
 end;
 
 function TVBServerMethodsClient.GetFileVersion(Request: string; var Response: string): string;

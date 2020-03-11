@@ -117,6 +117,9 @@ begin
       ReportDM.PrintExporting := True;
   end;
 
+  DataSet :=  nil;
+  ScriptID := 0;
+  ID := 0;
   Screen.Cursor := crHourglass;
   try
     case AButtonIndex of
@@ -257,7 +260,7 @@ begin
                 UpdateTableName := DataSet.UpdateOptions.UpdateTableName;
                 ID := DataSet.FieldByName('ID').AsInteger;
 
-                VBBaseDM.GetData(ScriptID, DataSet, DataSet.Name, '',
+                VBBaseDM.GetData(ScriptID, DataSet, DataSet.Name, ONE_SPACE,
                   FileName, Generatorname, UpdateTableName);
 
                 if not DataSet.Locate('ID', ID, []) then
@@ -300,19 +303,19 @@ begin
 end;
 
 procedure TBaseGridFrm.SetButtonVisibility(DataSet: TFDMemTable;  MasterID: Integer);
-var
-  ReadOnly: Boolean;
+//var
+//  ReadOnly: Boolean;
 begin
-  if not DataSet.Locate('ID', MasterID, []) then
-    ReadOnly := False
-  else
-    ReadOnly := DataSet.FieldByName('READ_ONLY').AsInteger = 1;
-
-  navMaster.Buttons[6].Visible := not ReadOnly; // Insert
-  navMaster.Buttons[8].Visible := not ReadOnly; // Delete
-  navMaster.Buttons[10].Visible := not ReadOnly; // Post
-  navMaster.Buttons[11].Visible := not ReadOnly; //  Cancel
-  navMaster.Width := 40;
+//  if not DataSet.Locate('ID', MasterID, []) then
+//    ReadOnly := False
+//  else
+//    ReadOnly := DataSet.FieldByName('READ_ONLY').AsInteger = 1;
+//
+//  navMaster.Buttons[6].Visible := not ReadOnly; // Insert
+//  navMaster.Buttons[8].Visible := not ReadOnly; // Delete
+//  navMaster.Buttons[10].Visible := not ReadOnly; // Post
+//  navMaster.Buttons[11].Visible := not ReadOnly; //  Cancel
+//  navMaster.Width := 40;
 end;
 
 procedure TBaseGridFrm.SetPrintButtonStatus(DataSet: TFDMemTable);

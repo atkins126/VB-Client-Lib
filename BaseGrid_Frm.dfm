@@ -9,7 +9,6 @@ inherited BaseGridFrm: TBaseGridFrm
   inherited layMain: TdxLayoutControl
     Width = 666
     Height = 581
-    LayoutLookAndFeel = lafCustomSkin
     ExplicitWidth = 666
     ExplicitHeight = 581
     object grdMaster: TcxGrid [0]
@@ -38,7 +37,7 @@ inherited BaseGridFrm: TBaseGridFrm
     object navMaster: TcxDBNavigator [1]
       Left = 11
       Top = 11
-      Width = 342
+      Width = 360
       Height = 40
       BorderStyle = nbsNone
       Buttons.OnButtonClick = navMasterButtonsButtonClick
@@ -95,8 +94,8 @@ inherited BaseGridFrm: TBaseGridFrm
       TabOrder = 0
     end
     object cbxOpenAfterExport: TcxCheckBox [2]
-      Left = 359
-      Top = 22
+      Left = 377
+      Top = 21
       Caption = 'Open document after export'
       Properties.ImmediatePost = True
       Properties.UseAlignmentWhenInplace = True
@@ -122,7 +121,7 @@ inherited BaseGridFrm: TBaseGridFrm
       CaptionOptions.Visible = False
       Control = navMaster
       ControlOptions.OriginalHeight = 40
-      ControlOptions.OriginalWidth = 342
+      ControlOptions.OriginalWidth = 360
       ControlOptions.ShowBorder = False
       Index = 0
     end
@@ -132,8 +131,8 @@ inherited BaseGridFrm: TBaseGridFrm
       CaptionOptions.Text = 'New Item'
       CaptionOptions.Visible = False
       Control = cbxOpenAfterExport
-      ControlOptions.OriginalHeight = 17
-      ControlOptions.OriginalWidth = 182
+      ControlOptions.OriginalHeight = 19
+      ControlOptions.OriginalWidth = 183
       ControlOptions.ShowBorder = False
       Index = 1
     end
