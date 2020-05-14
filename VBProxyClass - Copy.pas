@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 13/05/2020 07:33:51
+// 23/04/2020 15:27:47
 // 
 
 unit VBProxyClass;
@@ -18,11 +18,11 @@ type
     FconFBErrorCommand: TDBXCommand;
     FGetDataCommand: TDBXCommand;
     FExecuteSQLCommandCommand: TDBXCommand;
-    FExecuteStoredProcedureCommand: TDBXCommand;
     FGetFileVersionCommand: TDBXCommand;
     FDownloadFileCommand: TDBXCommand;
-    FModifyRecordCommand: TDBXCommand;
+    FTestTypeCommand: TDBXCommand;
     FEchoStringCommand: TDBXCommand;
+    FExecuteStoredProcedureCommand: TDBXCommand;
     FGetNextIDCommand: TDBXCommand;
     FGetUseCountCommand: TDBXCommand;
     FApplyDataUpdatesCommand: TDBXCommand;
@@ -36,11 +36,11 @@ type
     procedure conFBError(ASender: TObject; AInitiator: TObject; var AException: Exception);
     function GetData(Request: string; ParameterList: string; Generatorname: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
     function ExecuteSQLCommand(Request: string): string;
-    function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
     function GetFileVersion(Request: string; var Response: string): string;
     function DownloadFile(Request: string; var Response: string; var Size: Int64): TStream;
-    function ModifyRecord(Request: string; var Response: string): string;
+    function TestType(Request: string; var Response: string): string;
     function EchoString(Request: string; var Response: string): string;
+    function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
     function GetNextID(GeneratorName: string): string;
     function GetUseCount(Request: string): string;
     function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var ReplyMessage: string; GeneratorName: string; TableName: string; ScriptID: Integer): string;
@@ -233,21 +233,6 @@ begin
   Result := FExecuteSQLCommandCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TVBServerMethodsClient.ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
-begin
-  if FExecuteStoredProcedureCommand = nil then
-  begin
-    FExecuteStoredProcedureCommand := FDBXConnection.CreateCommand;
-    FExecuteStoredProcedureCommand.CommandType := TDBXCommandTypes.DSServerMethod;
-    FExecuteStoredProcedureCommand.Text := 'TVBServerMethods.ExecuteStoredProcedure';
-    FExecuteStoredProcedureCommand.Prepare;
-  end;
-  FExecuteStoredProcedureCommand.Parameters[0].Value.SetWideString(ProcedureName);
-  FExecuteStoredProcedureCommand.Parameters[1].Value.SetWideString(ParameterList);
-  FExecuteStoredProcedureCommand.ExecuteUpdate;
-  Result := FExecuteStoredProcedureCommand.Parameters[2].Value.GetWideString;
-end;
-
 function TVBServerMethodsClient.GetFileVersion(Request: string; var Response: string): string;
 begin
   if FGetFileVersionCommand = nil then
@@ -282,20 +267,20 @@ begin
   Result := FDownloadFileCommand.Parameters[3].Value.GetStream(FInstanceOwner);
 end;
 
-function TVBServerMethodsClient.ModifyRecord(Request: string; var Response: string): string;
+function TVBServerMethodsClient.TestType(Request: string; var Response: string): string;
 begin
-  if FModifyRecordCommand = nil then
+  if FTestTypeCommand = nil then
   begin
-    FModifyRecordCommand := FDBXConnection.CreateCommand;
-    FModifyRecordCommand.CommandType := TDBXCommandTypes.DSServerMethod;
-    FModifyRecordCommand.Text := 'TVBServerMethods.ModifyRecord';
-    FModifyRecordCommand.Prepare;
+    FTestTypeCommand := FDBXConnection.CreateCommand;
+    FTestTypeCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FTestTypeCommand.Text := 'TVBServerMethods.TestType';
+    FTestTypeCommand.Prepare;
   end;
-  FModifyRecordCommand.Parameters[0].Value.SetWideString(Request);
-  FModifyRecordCommand.Parameters[1].Value.SetWideString(Response);
-  FModifyRecordCommand.ExecuteUpdate;
-  Response := FModifyRecordCommand.Parameters[1].Value.GetWideString;
-  Result := FModifyRecordCommand.Parameters[2].Value.GetWideString;
+  FTestTypeCommand.Parameters[0].Value.SetWideString(Request);
+  FTestTypeCommand.Parameters[1].Value.SetWideString(Response);
+  FTestTypeCommand.ExecuteUpdate;
+  Response := FTestTypeCommand.Parameters[1].Value.GetWideString;
+  Result := FTestTypeCommand.Parameters[2].Value.GetWideString;
 end;
 
 function TVBServerMethodsClient.EchoString(Request: string; var Response: string): string;
@@ -312,6 +297,21 @@ begin
   FEchoStringCommand.ExecuteUpdate;
   Response := FEchoStringCommand.Parameters[1].Value.GetWideString;
   Result := FEchoStringCommand.Parameters[2].Value.GetWideString;
+end;
+
+function TVBServerMethodsClient.ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
+begin
+  if FExecuteStoredProcedureCommand = nil then
+  begin
+    FExecuteStoredProcedureCommand := FDBXConnection.CreateCommand;
+    FExecuteStoredProcedureCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FExecuteStoredProcedureCommand.Text := 'TVBServerMethods.ExecuteStoredProcedure';
+    FExecuteStoredProcedureCommand.Prepare;
+  end;
+  FExecuteStoredProcedureCommand.Parameters[0].Value.SetWideString(ProcedureName);
+  FExecuteStoredProcedureCommand.Parameters[1].Value.SetWideString(ParameterList);
+  FExecuteStoredProcedureCommand.ExecuteUpdate;
+  Result := FExecuteStoredProcedureCommand.Parameters[2].Value.GetWideString;
 end;
 
 function TVBServerMethodsClient.GetNextID(GeneratorName: string): string;
@@ -391,11 +391,11 @@ begin
   FconFBErrorCommand.DisposeOf;
   FGetDataCommand.DisposeOf;
   FExecuteSQLCommandCommand.DisposeOf;
-  FExecuteStoredProcedureCommand.DisposeOf;
   FGetFileVersionCommand.DisposeOf;
   FDownloadFileCommand.DisposeOf;
-  FModifyRecordCommand.DisposeOf;
+  FTestTypeCommand.DisposeOf;
   FEchoStringCommand.DisposeOf;
+  FExecuteStoredProcedureCommand.DisposeOf;
   FGetNextIDCommand.DisposeOf;
   FGetUseCountCommand.DisposeOf;
   FApplyDataUpdatesCommand.DisposeOf;

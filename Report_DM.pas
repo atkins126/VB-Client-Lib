@@ -1,20 +1,5 @@
 unit Report_DM;
 
-
-{Note to developer:
- This is a listing of the report files on disk to be loaded into the relevant
- report component at runtime.
- All reports are located in the C:\Data\VB\Reports\ folder.
-
- Report Compnent                Filename
- -------------------------------------------------------------------------------
- rptTimesheetUser               TimesheetUser.fr3
- rptTimesheetActivity           TimesheetCustomer.fr3
- rptTimesheetCustomer           TSSummaryByActivity.fr3
- rptBillableSummaryByCustomer   BillableSummaryByCustomer.fr3
- rptBillableSummaryByPeriod     BillableSummaryByPeriod.fr3
-}
-
 interface
 
 uses
