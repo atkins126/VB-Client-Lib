@@ -40,8 +40,8 @@ inherited ReportDM: TReportDM
     UpdateOptions.AutoCommitUpdates = True
     UpdateOptions.UpdateTableName = 'BILLABLE_SUMMARY'
     StoreDefs = True
-    Left = 160
-    Top = 270
+    Left = 170
+    Top = 275
     object cdsBillableSummaryCUSTOMER_ID: TIntegerField
       Alignment = taLeftJustify
       DisplayLabel = 'C ID'
@@ -243,7 +243,7 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Customer Type'
       FieldName = 'CUSTOMER_TYPE'
       Origin = 'CUSTOMER_TYPE'
-      Size = 30
+      Size = 50
     end
     object cdsTSBillableCUSTOMER_NAME: TStringField
       DisplayLabel = 'Customer'
@@ -400,11 +400,13 @@ inherited ReportDM: TReportDM
     CenterWindow = False
     PrintScaling = False
     PdfA = False
+    PDFStandard = psNone
+    PDFVersion = pv17
     Left = 155
     Top = 185
   end
   object rptBillableSummaryByCustomer: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
@@ -445,6 +447,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object PageHeader1: TfrxPageHeader
         FillType = ftBrush
         Frame.Typ = []
@@ -884,7 +887,7 @@ inherited ReportDM: TReportDM
     end
   end
   object rptTimesheetByUser: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     EngineOptions.DoublePass = True
     EngineOptions.PrintIfEmpty = False
@@ -927,6 +930,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object ReportTitle1: TfrxReportTitle
         FillType = ftBrush
         Frame.Typ = []
@@ -1293,7 +1297,7 @@ inherited ReportDM: TReportDM
         end
         object Memo26: TfrxMemoView
           AllowVectorExport = True
-          Left = 925.984251968504000000
+          Left = 925.984251968503900000
           Top = 90.708720000000000000
           Width = 56.692913390000000000
           Height = 18.897650000000000000
@@ -1494,7 +1498,7 @@ inherited ReportDM: TReportDM
     Top = 425
   end
   object rptBillableSummaryByPeriod: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
@@ -1536,6 +1540,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object PageHeader1: TfrxPageHeader
         FillType = ftBrush
         Frame.Typ = []
@@ -2031,7 +2036,7 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Type'
       FieldName = 'CUSTOMER_TYPE'
       Origin = 'CUSTOMER_TYPE'
-      Size = 30
+      Size = 50
     end
     object cdsTSCustomerCUSTOMER_STATUS: TStringField
       DisplayLabel = 'Status'
@@ -2496,7 +2501,7 @@ inherited ReportDM: TReportDM
     Top = 60
   end
   object rptTimesheetByCustomer: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     EngineOptions.DoublePass = True
     EngineOptions.PrintIfEmpty = False
@@ -2540,6 +2545,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object ReportTitle1: TfrxReportTitle
         FillType = ftBrush
         Frame.Typ = []
@@ -2601,7 +2607,7 @@ inherited ReportDM: TReportDM
         object TimesheetTIME_SPENT: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102360000
           Height = 18.897650000000000000
           StretchMode = smMaxHeight
@@ -2707,7 +2713,7 @@ inherited ReportDM: TReportDM
         object Memo13: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102360000
           Height = 18.897650000000000000
           DisplayFormat.FormatStr = '###,##0.00'
@@ -2981,7 +2987,7 @@ inherited ReportDM: TReportDM
         object Memo4: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102360000
           Height = 18.897650000000000000
           DisplayFormat.FormatStr = '###,##0.00'
@@ -3029,7 +3035,7 @@ inherited ReportDM: TReportDM
     end
   end
   object rptTimesheetByActivity: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     EngineOptions.DoublePass = True
     EngineOptions.PrintIfEmpty = False
@@ -3073,6 +3079,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object ReportTitle1: TfrxReportTitle
         FillType = ftBrush
         Frame.Typ = []
@@ -3626,7 +3633,7 @@ inherited ReportDM: TReportDM
     Top = 425
   end
   object rptTSSummaryByActivity: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     EngineOptions.DoublePass = True
     EngineOptions.PrintIfEmpty = False
@@ -3670,6 +3677,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object PageHeader1: TfrxPageHeader
         FillType = ftBrush
         Frame.Typ = []
@@ -4250,6 +4258,7 @@ inherited ReportDM: TReportDM
     Top = 425
   end
   object cdsTimesheet: TFDMemTable
+    Tag = 27
     ActiveStoredUsage = [auDesignTime]
     BeforeEdit = cdsTimesheetBeforeEdit
     BeforePost = cdsTimesheetBeforePost
@@ -4257,15 +4266,11 @@ inherited ReportDM: TReportDM
     OnCalcFields = cdsTimesheetCalcFields
     FieldDefs = <>
     CachedUpdates = True
-    IndexDefs = <>
-    Indexes = <
+    IndexDefs = <
       item
-        Active = True
-        Selected = True
         Name = 'idxActivityDate'
         Fields = 'ACTIVITY_DATE'
-        Options = [soNoCase]
-        FilterOptions = [ekNoCase]
+        Options = [ixCaseInsensitive]
       end>
     IndexName = 'idxActivityDate'
     FetchOptions.AssignedValues = [evMode, evRecordCountMode]
@@ -4332,6 +4337,13 @@ inherited ReportDM: TReportDM
       Origin = 'INVOICE_ID'
       Required = True
     end
+    object cdsTimesheetCN_ID: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C/N No'
+      FieldName = 'CN_ID'
+      Origin = 'CN_ID'
+      Required = True
+    end
     object cdsTimesheetACTIVITY: TStringField
       DisplayLabel = 'Activity'
       FieldName = 'ACTIVITY'
@@ -4359,13 +4371,6 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Std Rate'
       FieldName = 'STD_RATE'
       Origin = 'STD_RATE'
-      Required = True
-    end
-    object cdsTimesheetCN_ID: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'C/N No'
-      FieldName = 'CN_ID'
-      Origin = 'CN_ID'
       Required = True
     end
     object cdsTimesheetITEM_VALUE: TFloatField
@@ -4464,6 +4469,7 @@ inherited ReportDM: TReportDM
     Top = 185
   end
   object cdsCarryForwardDetail: TFDMemTable
+    Tag = 27
     ActiveStoredUsage = [auDesignTime]
     BeforeEdit = cdsTimesheetBeforeEdit
     BeforePost = cdsCarryForwardDetailBeforePost
@@ -4518,13 +4524,6 @@ inherited ReportDM: TReportDM
       Origin = 'CUSTOMER_ID'
       Required = True
     end
-    object IntegerField4: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'PI ID'
-      FieldName = 'PRICE_ITEM_ID'
-      Origin = 'PRICE_ITEM_ID'
-      Required = True
-    end
     object IntegerField5: TIntegerField
       Alignment = taLeftJustify
       DisplayLabel = 'Price Item'
@@ -4551,6 +4550,13 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Inv No'
       FieldName = 'INVOICE_ID'
       Origin = 'INVOICE_ID'
+      Required = True
+    end
+    object IntegerField9: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C/N No'
+      FieldName = 'CN_ID'
+      Origin = 'CN_ID'
       Required = True
     end
     object StringField1: TStringField
@@ -4582,13 +4588,6 @@ inherited ReportDM: TReportDM
       Origin = 'STD_RATE'
       Required = True
     end
-    object IntegerField9: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'C/N No'
-      FieldName = 'CN_ID'
-      Origin = 'CN_ID'
-      Required = True
-    end
     object FloatField5: TFloatField
       DisplayLabel = 'Value'
       FieldName = 'ITEM_VALUE'
@@ -4617,12 +4616,6 @@ inherited ReportDM: TReportDM
       DisplayLabel = 'Period'
       FieldName = 'THE_PERIOD'
       Origin = 'THE_PERIOD'
-      Required = True
-    end
-    object DateField3: TDateField
-      DisplayLabel = 'Wk Ending'
-      FieldName = 'WEEK_ENDING'
-      Origin = 'WEEK_ENDING'
       Required = True
     end
     object IntegerField12: TIntegerField
@@ -5005,7 +4998,7 @@ inherited ReportDM: TReportDM
     Top = 60
   end
   object rpt1: TfrxReport
-    Version = '6.2.1'
+    Version = '6.7'
     DotMatrixReport = False
     EngineOptions.DoublePass = True
     EngineOptions.PrintIfEmpty = False
@@ -5049,6 +5042,7 @@ inherited ReportDM: TReportDM
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object ReportTitle1: TfrxReportTitle
         FillType = ftBrush
         Frame.Typ = []
@@ -5110,7 +5104,7 @@ inherited ReportDM: TReportDM
         object TimesheetTIME_SPENT: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102400000
           Height = 18.897650000000000000
           StretchMode = smMaxHeight
@@ -5220,7 +5214,7 @@ inherited ReportDM: TReportDM
         object Memo13: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102400000
           Height = 18.897650000000000000
           DataSet = fdsTimesheetByActivity
@@ -5386,7 +5380,7 @@ inherited ReportDM: TReportDM
         object Memo25: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Top = 49.133890000000000000
           Width = 75.590551181102400000
           Height = 18.897650000000000000
@@ -5502,7 +5496,7 @@ inherited ReportDM: TReportDM
         object Memo4: TfrxMemoView
           Align = baRight
           AllowVectorExport = True
-          Left = 971.339258818897600000
+          Left = 971.339258818897700000
           Width = 75.590551181102400000
           Height = 18.897650000000000000
           DataSet = fdsTimesheetByActivity

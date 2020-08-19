@@ -1,9 +1,9 @@
 //
 // Created by the DataSnap proxy generator.
-// 20/06/2020 05:52:55
-//
+// 18/08/2020 16:37:41
+// 
 
-unit VBProxyClass;
+unit VBProxyClasses;
 
 interface
 
@@ -22,7 +22,7 @@ type
     FGetFileVersionCommand: TDBXCommand;
     FDownloadFileCommand: TDBXCommand;
     FModifyRecordCommand: TDBXCommand;
-    FGetNextIDCommand: TDBXCommand;
+    FGetIDCommand: TDBXCommand;
     FGetUseCountCommand: TDBXCommand;
     FGetFieldValueCommand: TDBXCommand;
     FApplyDataUpdatesCommand: TDBXCommand;
@@ -36,11 +36,11 @@ type
     procedure conFBError(ASender: TObject; AInitiator: TObject; var AException: Exception);
     function GetData(Request: string; ParameterList: string; Generatorname: string; Tablename: string; DataSetName: string; var Response: string): TFDJSONDataSets;
     function ExecuteSQLCommand(Request: string): string;
-    function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
+    function ExecuteStoredProcedure(ProcedureName: string; ParameterList: string; ParameterValues: string; var OutputValues: string): string;
     function GetFileVersion(Request: string; var Response: string): string;
     function DownloadFile(Request: string; var Response: string; var Size: Int64): TStream;
     function ModifyRecord(Request: string; var Response: string): string;
-    function GetNextID(GeneratorName: string): string;
+    function GetID(GeneratorName: string; IDRank: Integer): string;
     function GetUseCount(Request: string): string;
     function GetFieldValue(Request: string; FieldTypeID: Integer; var Response: string): string;
     function ApplyDataUpdates(DeltaList: TFDJSONDeltas; var ReplyMessage: string; GeneratorName: string; TableName: string; ScriptID: Integer): string;
@@ -233,7 +233,7 @@ begin
   Result := FExecuteSQLCommandCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TVBServerMethodsClient.ExecuteStoredProcedure(ProcedureName: string; ParameterList: string): string;
+function TVBServerMethodsClient.ExecuteStoredProcedure(ProcedureName: string; ParameterList: string; ParameterValues: string; var OutputValues: string): string;
 begin
   if FExecuteStoredProcedureCommand = nil then
   begin
@@ -244,8 +244,11 @@ begin
   end;
   FExecuteStoredProcedureCommand.Parameters[0].Value.SetWideString(ProcedureName);
   FExecuteStoredProcedureCommand.Parameters[1].Value.SetWideString(ParameterList);
+  FExecuteStoredProcedureCommand.Parameters[2].Value.SetWideString(ParameterValues);
+  FExecuteStoredProcedureCommand.Parameters[3].Value.SetWideString(OutputValues);
   FExecuteStoredProcedureCommand.ExecuteUpdate;
-  Result := FExecuteStoredProcedureCommand.Parameters[2].Value.GetWideString;
+  OutputValues := FExecuteStoredProcedureCommand.Parameters[3].Value.GetWideString;
+  Result := FExecuteStoredProcedureCommand.Parameters[4].Value.GetWideString;
 end;
 
 function TVBServerMethodsClient.GetFileVersion(Request: string; var Response: string): string;
@@ -298,18 +301,19 @@ begin
   Result := FModifyRecordCommand.Parameters[2].Value.GetWideString;
 end;
 
-function TVBServerMethodsClient.GetNextID(GeneratorName: string): string;
+function TVBServerMethodsClient.GetID(GeneratorName: string; IDRank: Integer): string;
 begin
-  if FGetNextIDCommand = nil then
+  if FGetIDCommand = nil then
   begin
-    FGetNextIDCommand := FDBXConnection.CreateCommand;
-    FGetNextIDCommand.CommandType := TDBXCommandTypes.DSServerMethod;
-    FGetNextIDCommand.Text := 'TVBServerMethods.GetNextID';
-    FGetNextIDCommand.Prepare;
+    FGetIDCommand := FDBXConnection.CreateCommand;
+    FGetIDCommand.CommandType := TDBXCommandTypes.DSServerMethod;
+    FGetIDCommand.Text := 'TVBServerMethods.GetID';
+    FGetIDCommand.Prepare;
   end;
-  FGetNextIDCommand.Parameters[0].Value.SetWideString(GeneratorName);
-  FGetNextIDCommand.ExecuteUpdate;
-  Result := FGetNextIDCommand.Parameters[1].Value.GetWideString;
+  FGetIDCommand.Parameters[0].Value.SetWideString(GeneratorName);
+  FGetIDCommand.Parameters[1].Value.SetInt32(IDRank);
+  FGetIDCommand.ExecuteUpdate;
+  Result := FGetIDCommand.Parameters[2].Value.GetWideString;
 end;
 
 function TVBServerMethodsClient.GetUseCount(Request: string): string;
@@ -396,7 +400,7 @@ begin
   FGetFileVersionCommand.DisposeOf;
   FDownloadFileCommand.DisposeOf;
   FModifyRecordCommand.DisposeOf;
-  FGetNextIDCommand.DisposeOf;
+  FGetIDCommand.DisposeOf;
   FGetUseCountCommand.DisposeOf;
   FGetFieldValueCommand.DisposeOf;
   FApplyDataUpdatesCommand.DisposeOf;

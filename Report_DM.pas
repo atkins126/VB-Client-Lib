@@ -14,7 +14,8 @@ uses
   FireDAC.Comp.Client, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.VCLUI.Wait, FireDAC.DApt,
-  FireDAC.Phys.SQLiteVDataSet, FireDAC.Phys.FB, FireDAC.Phys.FBDef;
+  FireDAC.Phys.SQLiteVDataSet, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
+  FireDAC.Phys.SQLiteWrapper.Stat;
 
 type
   TReportDM = class(TBaseDM)
@@ -175,7 +176,6 @@ type
     IntegerField1: TIntegerField;
     IntegerField2: TIntegerField;
     IntegerField3: TIntegerField;
-    IntegerField4: TIntegerField;
     IntegerField5: TIntegerField;
     IntegerField6: TIntegerField;
     IntegerField7: TIntegerField;
@@ -191,7 +191,6 @@ type
     DateField1: TDateField;
     DateField2: TDateField;
     IntegerField11: TIntegerField;
-    DateField3: TDateField;
     IntegerField12: TIntegerField;
     StringField2: TStringField;
     IntegerField13: TIntegerField;
@@ -252,12 +251,9 @@ type
   private
     { Private declarations }
     FID: Integer;
-
-    property ID: Integer read FID write FID;
+    FReport: TfrxReport;
   public
     { Public declarations }
-    FReport: TfrxReport;
-
     property Report: TfrxReport read FReport write FReport;
   end;
 
@@ -276,28 +272,28 @@ uses VBBase_DM, VBCommonValues, RUtils;
 {$R *.dfm}
 
 procedure TReportDM.cdsTimesheetAfterPost(DataSet: TDataSet);
-var
-  DataSetState: TDatasetState;
 begin
-  inherited;
-  DataSetState := DataSet.State;
   DataSet := cdsTimesheet;
-  SetLength(VBBaseDM.FDataSetArray, 1);
-  VBBaseDM.FDataSetArray[0] := TFDMemTable(DataSet);
+  SetLength(VBBaseDM.DataSetArray, 1);
+  VBBaseDM.DataSetArray[0] := TFDMemTable(DataSet);
 
-  VBBaseDM.ApplyUpdates(VBBaseDM.FDataSetArray, TFDMemTable(DataSet).UpdateOptions.GeneratorName, TFDMemTable(DataSet).UpdateOptions.UpdateTableName);
+  VBBaseDM.ApplyUpdates(
+    TFDMemTable(DataSet),
+    VBBaseDM.DataSetArray,
+    TFDMemTable(DataSet).UpdateOptions.GeneratorName,
+    TFDMemTable(DataSet).UpdateOptions.UpdateTableName,
+    TFDMemTable(DataSet).Tag);
+
   SendMessage(Application.MainForm.Handle, WM_RECORD_ID, DWORD(PChar('REQUEST=REFRESH_DATA' + '|ID=' + FID.ToString)), 0);
 end;
 
 procedure TReportDM.cdsTimesheetBeforeEdit(DataSet: TDataSet);
 begin
-  inherited;
   VBBaseDM.MadeChanges := False;
 end;
 
 procedure TReportDM.cdsTimesheetBeforePost(DataSet: TDataSet);
 begin
-  inherited;
   FID := cdsTimesheet.FieldByName('ID').AsInteger;
 end;
 
@@ -306,7 +302,6 @@ procedure TReportDM.cdsTimesheetCalcFields(DataSet: TDataSet);
 //  Day, Month, Year: Word;
 //  PeriodMonth: Integer;
 begin
-  inherited;
 //  if cdsTimesheet.FieldByName('TIME_SPENT').AsFloat = 0 then
 //    cdsTimesheet.FieldByName('TIME_HOURS').AsFloat := 0
 //  else
@@ -323,7 +318,6 @@ begin
 //      2: cdsTimesheet.FieldByName('ITEM_VALUE').AsFloat :=
 //        cdsTimesheet.FieldByName('ACTUAL_RATE').AsFloat;
 //    end;
-
 
 //  DecodeDate(cdsTimesheet.FieldByName('ACTIVITY_DATE').AsDateTime, Year, Month, Day);
 //  PeriodMonth := cdsTimesheet.FieldByName('THE_PERIOD').AsInteger mod 1000;
@@ -350,13 +344,11 @@ end;
 
 procedure TReportDM.cdsCarryForwardDetailBeforePost(DataSet: TDataSet);
 begin
-  inherited;
   FID := cdsCarryForwardDetail.FieldByName('ID').AsInteger;
 end;
 
 procedure TReportDM.cdsCarryForwardDetailCalcFields(DataSet: TDataSet);
 begin
-  inherited;
 //  if cdsCarryForwardDetail.FieldByName('TIME_SPENT').AsFloat = 0 then
 //    cdsCarryForwardDetail.FieldByName('TIME_HOURS').AsFloat := 0
 //  else
